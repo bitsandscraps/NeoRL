@@ -1,14 +1,13 @@
 from ctypes import util
-import gym
+import gymnasium
 from neorl import core
-from gym.utils.seeding import np_random
-from gym.spaces import Box, MultiDiscrete
+from gymnasium.utils.seeding import np_random
+from gymnasium.spaces import Box
 import onnxruntime as ort
 import numpy as np
 from copy import deepcopy
 import os
 # import onnx
-from gym.utils.seeding import np_random
 
 
 class Waterworks(core.EnvData):
@@ -55,7 +54,7 @@ class Waterworks(core.EnvData):
         if self.cur_step >= 287:
             done = True
         self.state = np.concatenate((next_obs, self.ex_var[self.cur_step]))
-        return deepcopy(self.state), rew, done, {}
+        return deepcopy(self.state), rew, False, done, {}
 
     def reset(self):
         self.day_case = np.random.randint(0, self.total_days)  # randomly select a day as the init_state
@@ -64,7 +63,7 @@ class Waterworks(core.EnvData):
         self.ex_var = self.env_data['ex_var'][self.day_case]  # get the external vars
         self.init_obs = self.env_data['init_obs'][self.day_case]  # get the init obs
         self.state = np.concatenate((self.init_obs, self.ex_var[self.cur_step]))
-        return deepcopy(self.state)
+        return deepcopy(self.state), {}
 
     def get_reward(self, obs, is_day):
         def day_reward(x):
@@ -95,7 +94,7 @@ if __name__ == "__main__":
         while not done:  # test random action
             act = env.action_space.sample()
             # print(act)
-            obs, rew, done, _ = env.step(act)
+            obs, rew, _, done, _ = env.step(act)
             step += 1
             ret += rew
         ret_list.append(ret)

@@ -1,6 +1,6 @@
 import numbers
 import numpy as np
-from gym import spaces
+from gymnasium import spaces
 from neorl import core
 
 
@@ -54,7 +54,7 @@ class LogisticsDistributionEnv(core.EnvData):
         while len(self.points) < self.POINT_NUM:
             self.points[self._roll_a_point()] = 1
         self.unfinished = self.POINT_NUM
-        return self._draw_city()
+        return self._draw_city(), {}
 
     def step(self, action: numbers.Integral):
         target_x, target_y = action // self.LENGTH, action % self.LENGTH
@@ -68,9 +68,10 @@ class LogisticsDistributionEnv(core.EnvData):
         obs = self._draw_city()
         self.step_counter += 1
 
-        done = (self.unfinished == 0) or (self.step_counter > self.LENGTH * self.LENGTH * self.POINT_NUM)
+        terminated = self.unfinished == 0
+        truncated = self.step_counter > self.LENGTH * self.LENGTH * self.POINT_NUM
 
-        return obs, -1 * rew, done, {"speed": self.speed, "direction": DIREC_DICT[self.direction]}
+        return obs, -1 * rew, terminated, truncated, {"speed": self.speed, "direction": DIREC_DICT[self.direction]}
 
     def close(self):
         pass

@@ -25,7 +25,7 @@ SOFTWARE.
 """
 
 from neorl import core
-import gym
+import gymnasium
 import numpy as np
 from collections import OrderedDict
 
@@ -82,7 +82,7 @@ class IBGym(core.EnvData):
 
         # Defining the action space
         if self.action_type == 'discrete':  # Discrete action space with three values per steering (3^3 = 27)
-            self.action_space = gym.spaces.Discrete(27)
+            self.action_space = gymnasium.spaces.Discrete(27)
 
             # A list of all possible discretized actions
             self.env_action = []
@@ -92,7 +92,7 @@ class IBGym(core.EnvData):
                         self.env_action.append([v, g, s])
 
         elif self.action_type == 'continuous':  # Continuous action space for each steering [-1,1]
-            self.action_space = gym.spaces.Box(np.array([-1, -1, -1]), np.array([+1, +1, +1]))
+            self.action_space = gymnasium.spaces.Box(np.array([-1, -1, -1]), np.array([+1, +1, +1]))
 
         else:
             raise ValueError('Invalid action_type. action_space can either be "discrete" or "continuous"')
@@ -102,12 +102,12 @@ class IBGym(core.EnvData):
         single_high = np.array([100, 100, 100, 100, 1000, 1000])
 
         if self.observation_type == "classic":  # classic only has the current state frame
-            self.observation_space = gym.spaces.Box(low=single_low, high=single_high)
+            self.observation_space = gymnasium.spaces.Box(low=single_low, high=single_high)
 
         elif self.observation_type == "include_past":  # time embedding: state contains also past N state frames
             low = np.hstack([single_low] * self.n_past_timesteps)
             high = np.hstack([single_high] * self.n_past_timesteps)
-            self.observation_space = gym.spaces.Box(low=low, high=high)
+            self.observation_space = gymnasium.spaces.Box(low=low, high=high)
 
         else:
             raise ValueError('Invalid observation_type. observation_type can either be "classic" or "include_past"')
@@ -162,7 +162,7 @@ class IBGym(core.EnvData):
                              ' or "delta" for the change in the cost fucntion between steps.')
 
         self.info = self._markovian_state()  # entire markov state - not all info is visible in observations
-        return return_observation, return_reward, self.done, self.info
+        return return_observation, return_reward, False, self.done, self.info
 
     def reset(self):
         """
@@ -199,7 +199,7 @@ class IBGym(core.EnvData):
         # whether or not the trajectory has ended
         self.done = False
 
-        return return_observation
+        return return_observation, self.info
 
     def render(self, mode='human'):
         """

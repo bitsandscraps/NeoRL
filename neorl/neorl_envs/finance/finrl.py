@@ -236,7 +236,7 @@ class StockEnvTrain(core.EnvData):
 
 
 
-        return np.array(self.state), self.reward, self.terminal, {}
+        return np.array(self.state), self.reward, False, self.terminal, {}
 
     def reset(self):
         self.asset_memory = [self.initial_amount]
@@ -252,7 +252,7 @@ class StockEnvTrain(core.EnvData):
                       [0]*self.stock_dim + \
                       sum([self.data[tech].values.tolist() for tech in self.tech_indicator_list ], [])
         # iteration += 1 
-        return np.array(self.state)
+        return np.array(self.state), {}
     
     def render(self, mode='human'):
         return self.state

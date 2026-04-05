@@ -1,16 +1,16 @@
 from neorl import core
-import gym
+import gymnasium
 import os
-from gym.utils import seeding
+from gymnasium.utils import seeding
 import numpy as np
 import pandas as pd
 import random
 import json
-from gym import spaces
+from gymnasium import spaces
 from neorl.neorl_envs.citylearn.energy_models import HeatPump, ElectricHeater, EnergyStorage, Building
 from neorl.neorl_envs.citylearn.reward_function import reward_function_sa, reward_function_ma
 
-gym.logger.set_level(40)
+gymnasium.logger.min_level = gymnasium.logger.ERROR
 
 # Reference Rule-based controller. Used as a baseline to calculate the costs in CityLearn
 # It requires, at least, the hour of the day as input state
@@ -491,7 +491,7 @@ class CityLearn(core.EnvData):
         self.net_electric_consumption_no_pv_no_storage.append(np.float32(electric_demand + elec_generation - elec_consumption_cooling_storage - elec_consumption_dhw_storage))
         
         terminal = self._terminal()
-        return (self._get_ob(), rewards, terminal, {"actual_action": actions})
+        return (self._get_ob(), rewards, False, terminal, {"actual_action": actions})
     
     def reset_baseline_cost(self):
         self.cost_rbc = None
@@ -606,7 +606,7 @@ class CityLearn(core.EnvData):
                 
             self.state = np.array(self.state)
             
-        return self._get_ob()
+        return self._get_ob(), {}
 
     def _get_ob(self):            
         return self.state

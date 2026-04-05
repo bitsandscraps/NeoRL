@@ -1,8 +1,8 @@
-import gym
+import gymnasium
 from .utils import get_json, sample_dataset, LOCAL_JSON_FILE_PATH, DATA_PATH
 
 
-class EnvData(gym.Env):
+class EnvData(gymnasium.Env):
     def get_dataset(self, task_name_version: str = None, data_type: str = "high", train_num: int = 100,
                     need_val: bool = True, val_ratio: float = 0.1, path: str = DATA_PATH, use_data_reward: bool = True):
         """

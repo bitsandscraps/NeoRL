@@ -1,9 +1,10 @@
-import gym
+import gymnasium
+import gymnasium_robotics
 from neorl import core
 
 
 def make_env(task):
-    env = gym.make(task, exclude_current_positions_from_observation=False)
+    env = gymnasium.make(task, exclude_current_positions_from_observation=False)
     env_data = core.EnvData()
     env.set_name = env_data.set_name
     env.get_name = env_data.get_name
