@@ -1,5 +1,4 @@
 import numpy as np
-import torch
 
 def get_reward(data):    
     obs = data["obs"]
@@ -19,12 +18,7 @@ def get_reward(data):
     ctrl_cost_weight = 0.1
     dt = 0.05
     
-    if isinstance(obs, np.ndarray):
-        array_type = np
-    else:
-        array_type = torch
-    
-    ctrl_cost = ctrl_cost_weight * array_type.sum(array_type.square(action),axis=1)
+    ctrl_cost = ctrl_cost_weight * np.sum(np.square(action),axis=1)
     
     x_position_before = obs[:,0]
     x_position_after = obs_next[:,0]

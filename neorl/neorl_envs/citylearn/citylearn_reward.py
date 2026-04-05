@@ -1,5 +1,4 @@
 import numpy as np
-import torch
 
 
 def get_reward(data):    
@@ -19,12 +18,8 @@ def get_reward(data):
     index = [25, 32, 38, 45, 52, 59, 66, 73]
     electricity_demand = - obs_next[:, index]
     
-    if isinstance(obs, np.ndarray):
-        reward_ = - np.sum(electricity_demand, axis=1)
-        reward_ = np.clip(reward_, 0, np.max(reward_))
-    else:
-        reward_ = - torch.sum(electricity_demand, axis=1)
-        reward_ = torch.clamp(reward_, 0, torch.max(reward_))
+    reward_ = - np.sum(electricity_demand, axis=1)
+    reward_ = np.clip(reward_, 0, np.max(reward_))
 
     reward = reward_ ** 3.0 * 0.00001
 

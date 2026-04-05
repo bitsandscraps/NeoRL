@@ -1,5 +1,4 @@
 import numpy as np
-import torch
 from neorl.neorl_envs.logistics_distribution.ld_env import NORTH, EAST, SOUTH, WEST
 
 
@@ -17,11 +16,6 @@ def get_reward(data):
         action = action.reshape(1, -1)
     if len(obs_next.shape) == 1:
         obs_next = obs_next.reshape(1, -1)
-
-    if isinstance(obs, np.ndarray):
-        array_type = np
-    else:
-        array_type = torch
 
     GRID = 3
     _same_street = lambda m, n: m == n and m % GRID == 0 and n % GRID == 0
@@ -41,17 +35,17 @@ def get_reward(data):
                 ret = m - m % GRID + GRID
         return ret
 
-    reward = array_type.zeros([obs.shape[0], ])
+    reward = np.zeros([obs.shape[0], ])
 
     for i in range(len(obs)):
 
         to_2d = lambda p: (p // 8, p % 8)
 
-        points = tuple(map(to_2d, array_type.where(obs[i][:-3] == 2)[0]))
+        points = tuple(map(to_2d, np.where(obs[i][:-3] == 2)[0]))
 
         speed, direction, SPEED_MAX = obs[i][-3:]
 
-        agent_pos = array_type.where(obs[i][:-3] == 3)[0]
+        agent_pos = np.where(obs[i][:-3] == 3)[0]
         agent_pos = agent_pos.item()
         x, y = to_2d(agent_pos)
 

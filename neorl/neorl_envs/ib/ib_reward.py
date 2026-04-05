@@ -1,5 +1,3 @@
-import torch
-
 def get_reward(data):
     obs = data["obs"]
     action = data["action"]

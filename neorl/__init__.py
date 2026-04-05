@@ -25,11 +25,6 @@ def make(task: str, reward_func=None, done_func=None):
         elif task in ["HalfCheetah-v3", "Walker2d-v3", "Hopper-v3"]:
             from neorl.neorl_envs import mujoco
             env = mujoco.make_env(task)
-        elif task.lower() == 'sp' or task.lower() == 'sp_v0' or task.lower() == 'sp-v0' or task.lower() == 'sales_promotion_v0'or task.lower() == 'sales_promotion-v0':
-            from neorl.neorl_envs.SalesPromotion import get_env, sales_promotion_envs
-            task = 'sales_promotion_v0'  # In general, task name should match the name in data_map.json, however, the task name for SP env is hardcoded in the environment, so it can be different here
-            assert task in sales_promotion_envs.keys()
-            env = get_env(sales_promotion_envs[task])
         elif task.lower() =='ww' or task.lower() =='ww_v0' or task.lower() =='ww-v0' or task.lower() == 'waterworks_v0' or task.lower() == 'waterworks-v0':
             from neorl.neorl_envs.WaterWorks import get_env, waterworks_envs
             task = 'ww'

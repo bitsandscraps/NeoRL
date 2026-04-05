@@ -1,5 +1,4 @@
 import numpy as np
-import torch
 
 
 def get_reward(data):
@@ -19,14 +18,9 @@ def get_reward(data):
     reward_scaling = 1e-4
     stock_dim = 30
 
-    if isinstance(obs, np.ndarray):
-        array_type = np
-    else:
-        array_type = torch
-
-    begin_total_asset = obs[:, 0] + array_type.sum(
+    begin_total_asset = obs[:, 0] + np.sum(
         obs[:, 1:(stock_dim + 1)] * obs[:, (stock_dim + 1):(stock_dim * 2 + 1)], axis=1)
-    end_total_asset = obs_next[:, 0] + array_type.sum(
+    end_total_asset = obs_next[:, 0] + np.sum(
         obs_next[:, 1:(stock_dim + 1)] * obs_next[:, (stock_dim + 1):(stock_dim * 2 + 1)], axis=1)
     reward = end_total_asset - begin_total_asset
     reward = reward_scaling * reward
