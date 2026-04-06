@@ -94,7 +94,7 @@ def find_local_file(files, traj_num, train_or_val):
     """
     Find appropriate least dataset in local according to num.
     """
-    least_num = np.Inf
+    least_num = np.inf
     for f in files:
         name_list = re.split("[-.]", f)
         if train_or_val in name_list:
@@ -110,7 +110,7 @@ def find_remote_file(data_json, task_name_version, data_type, traj_num, train_or
     """
     Find appropriate least dataset in remote (data_json) according to num.
     """
-    least_num = np.Inf
+    least_num = np.inf
     for k, v in data_json.items():
         if task_name_version in k and train_or_val in k and data_type in k:
             name_list = re.split("[-.]", k)
@@ -144,12 +144,12 @@ def sample_dataset(task_name_version, path, traj_num, data_json, data_type, use_
 
     if len(local_files) != 0:  # find dataset in local
         least_num = find_local_file(local_files, traj_num, train_or_val)
-        if least_num == np.Inf:  # find appropriate least dataset in remote
+        if least_num == np.inf:  # find appropriate least dataset in remote
             least_num = find_remote_file(data_json, task_name_version, data_type, traj_num, train_or_val)
     else:  # find appropriate least dataset in remote
         least_num = find_remote_file(data_json, task_name_version, data_type, traj_num, train_or_val)
 
-    if least_num == np.Inf:
+    if least_num == np.inf:
         raise Exception("Could not find appropriate dataset, please reduce `num`!")
 
     data_key = "-".join([task_name_version, data_type, str(least_num), train_or_val])
