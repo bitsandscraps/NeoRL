@@ -164,15 +164,17 @@ class IBGym(core.EnvData):
         self.info = self._markovian_state()  # entire markov state - not all info is visible in observations
         return return_observation, return_reward, False, self.done, self.info
 
-    def reset(self):
+    def reset(self, seed=None):
         """
         resets environment
         :return: first observation of fresh environment
         """
 
         # ensure reproducibility, but still use different env / seed on every reset
-        self.IB = IDS(self.setpoint, inital_seed=self.init_seed)
-        self.init_seed = np.random.randint(0, 100000)
+
+        if seed is None:
+            seed = self.init_seed = np.random.randint(0, 100000)
+        self.IB = IDS(self.setpoint, inital_seed=seed)
 
         # if multiple timesteps in a single observation (time embedding), need list
         if self.observation_type == "include_past":
